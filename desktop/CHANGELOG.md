@@ -1,5 +1,48 @@
 # Changelog
 
+## [0.14.0](https://github.com/matjazonline/doop/compare/desktop-v0.13.0...desktop-v0.14.0) (2026-11-10)
+
+
+### Features
+
+* **agent:** add Claude CLI and API key providers ([#155](https://github.com/matjazonline/doop/issues/155)) ([4bed23d](https://github.com/matjazonline/doop/commit/4bed23da489bcb5345e483015c791b51ff30c81e))
+* **backgrounds:** list_backgrounds — browse the library by eye instead of keyword search ([#154](https://github.com/matjazonline/doop/issues/154)) ([941074f](https://github.com/matjazonline/doop/commit/941074f0ef7f37a0bdd4d0da46ec68ad75fe442c))
+* **canvas:** action registry with ⌘K palette, main menu and editor shortcuts ([#448](https://github.com/matjazonline/doop/issues/448)) ([1970798](https://github.com/matjazonline/doop/commit/1970798b4f13c65c90654116d1dcf0ae634856c0))
+* **canvas:** add rulers and draggable snapping guides ([#372](https://github.com/matjazonline/doop/issues/372)) ([fdbb07e](https://github.com/matjazonline/doop/commit/fdbb07e562dbe4d4bd89396d778a9af219314be6))
+* **claude:** add direct connector setup and desktop extension ([#280](https://github.com/matjazonline/doop/issues/280)) ([d058f12](https://github.com/matjazonline/doop/commit/d058f123b831949725f87654148401b0d1cc1301))
+* **design:** move the app onto the Disc-D identity and editorial system ([df5a134](https://github.com/matjazonline/doop/commit/df5a1346c68df7bef1e7c4953323356f00258c75))
+* **desktop:** add a drag-to-Applications background to the macOS DMG ([#225](https://github.com/matjazonline/doop/issues/225)) ([8f5ada5](https://github.com/matjazonline/doop/commit/8f5ada56e7cbfe81efae646bede81e8e8e50bbcb))
+* **desktop:** add automatic Codex MCP setup ([#289](https://github.com/matjazonline/doop/issues/289)) ([3b5b090](https://github.com/matjazonline/doop/commit/3b5b0906a932d1381c713ca9b7fb020553151ea5))
+* **desktop:** add macOS check for updates menu ([#350](https://github.com/matjazonline/doop/issues/350)) ([f16644a](https://github.com/matjazonline/doop/commit/f16644a1fc8e6b758bd85fb7d8355e5d2b939b28))
+* **desktop:** add Windows application support ([#112](https://github.com/matjazonline/doop/issues/112)) ([2899cc3](https://github.com/matjazonline/doop/commit/2899cc3c9d5fad5fee82529f78ae5a4f73a5eb61))
+* **desktop:** ask where to save PNG/JPG exports with a native save panel ([#181](https://github.com/matjazonline/doop/issues/181)) ([a42e8ee](https://github.com/matjazonline/doop/commit/a42e8ee9f21af961adb60c8a546a0ded16f067cd))
+* **desktop:** build and release the app for Linux ([#295](https://github.com/matjazonline/doop/issues/295)) ([56d1174](https://github.com/matjazonline/doop/commit/56d1174ca3214dcb263c2a0cb7fa76a961fa3331))
+* **desktop:** choose the Doop server from the sign-in screen ([#452](https://github.com/matjazonline/doop/issues/452)) ([f98867a](https://github.com/matjazonline/doop/commit/f98867a0917c36fcb2e1139b2f984a3ef9b4f0da))
+* **desktop:** figma-style canvas tabs, overlay title bar, external links open in the browser ([#93](https://github.com/matjazonline/doop/issues/93)) ([3dcc1a5](https://github.com/matjazonline/doop/commit/3dcc1a5098b43413c9ba2412a19c197d7862e097))
+* **desktop:** follow new Claude models by alias, and pick the effort ([#251](https://github.com/matjazonline/doop/issues/251)) ([bfcec7d](https://github.com/matjazonline/doop/commit/bfcec7d318cf03df440a852844fd0033a05e5e47))
+* **desktop:** google, microsoft and sso sign-in through the system browser with a doop:// handoff ([#177](https://github.com/matjazonline/doop/issues/177)) ([5b51765](https://github.com/matjazonline/doop/commit/5b517654bdada4d41820f51f04037fd24bfaa501))
+* **desktop:** offer downloaded updates in an in-app card ([#297](https://github.com/matjazonline/doop/issues/297)) ([c089fd6](https://github.com/matjazonline/doop/commit/c089fd61b4bb2bc2cfb013c2f950050010d60b05))
+* **desktop:** ship the macOS app on Chromium (CEF), replacing the WebKit app in place ([#423](https://github.com/matjazonline/doop/issues/423)) ([ddea86b](https://github.com/matjazonline/doop/commit/ddea86b528b585246000ca1b9cae8ce16635afcd))
+* **desktop:** sign the Windows app and installer with Azure Artifact Signing ([#273](https://github.com/matjazonline/doop/issues/273)) ([d47def3](https://github.com/matjazonline/doop/commit/d47def3382a5080123722c16306c56ada33a04d9))
+* **desktop:** update the app automatically from a signed feed ([#285](https://github.com/matjazonline/doop/issues/285)) ([3298742](https://github.com/matjazonline/doop/commit/329874207677d7cf4790b3231aab46fc7f9462e7))
+* **fonts:** hosted fonts in the Design panel, and fonts from this computer on the desktop ([#352](https://github.com/matjazonline/doop/issues/352)) ([fcbdb5f](https://github.com/matjazonline/doop/commit/fcbdb5fef89610246b3cb4f1f68177e972f9fb0e))
+
+
+### Bug Fixes
+
+* **desktop:** cmd+w closes the active tab instead of the app, logout lands on /auth ([#155](https://github.com/matjazonline/doop/issues/155)) ([eaeebd2](https://github.com/matjazonline/doop/commit/eaeebd2414679ba61ff46cdc17080c53582d1b92))
+* **desktop:** crisp Windows window icon ([#364](https://github.com/matjazonline/doop/issues/364)) ([37214b8](https://github.com/matjazonline/doop/commit/37214b8aa43fec5cb1f03eb1e1fd55655049ead8))
+* **desktop:** give up on a stalled update download ([#430](https://github.com/matjazonline/doop/issues/430)) ([0b1c1e1](https://github.com/matjazonline/doop/commit/0b1c1e11becdf299df9a3edeebdb553f6c9748cb))
+* **desktop:** let the tab strip drag the window on macOS ([#106](https://github.com/matjazonline/doop/issues/106)) ([4309e7e](https://github.com/matjazonline/doop/commit/4309e7e9b1269b8288cae3f925b8d01acbedcdbb)), closes [#95](https://github.com/matjazonline/doop/issues/95)
+* **desktop:** mailto and tel links open the system handler instead of being dropped ([#172](https://github.com/matjazonline/doop/issues/172)) ([15385ee](https://github.com/matjazonline/doop/commit/15385eec0a9806c314f981424b54e3ed345c5115))
+* **desktop:** PNG/JPG exports download to ~/Downloads instead of opening in the window ([#178](https://github.com/matjazonline/doop/issues/178)) ([115989f](https://github.com/matjazonline/doop/commit/115989fae6652bcf7ad4e3be9a5b44bd1971ef08))
+* **desktop:** regenerate app-icon.png on the Disc-D mark ([#103](https://github.com/matjazonline/doop/issues/103)) ([5e10b49](https://github.com/matjazonline/doop/commit/5e10b49671d6ca7822ec921d287cb2e5ff0826c1))
+* **desktop:** run the Claude Code the login shell runs, and let Settings choose one ([#271](https://github.com/matjazonline/doop/issues/271)) ([eaf183b](https://github.com/matjazonline/doop/commit/eaf183ba852bc078c89ed06ad5d8488c9543e4d2))
+* **desktop:** run the newest Claude Code found, and say when it is too old ([#254](https://github.com/matjazonline/doop/issues/254)) ([ba7b602](https://github.com/matjazonline/doop/commit/ba7b6025450fc77b0390e50f145ee8ea67a090f8))
+* **mcp:** bill agent comment replies to the connecting user, not the canvas owner ([5198236](https://github.com/matjazonline/doop/commit/5198236d7ef2bd7e38068af1b4877f1d9ad66fee))
+* **sync:** preserve OSS migrations and complete shared font support ([7148e73](https://github.com/matjazonline/doop/commit/7148e73675aa8eaa036987d932674a32962a8049))
+* **workspaces:** order billing events across subscriptions, durable revocations, owner-only moves in ([33aff5c](https://github.com/matjazonline/doop/commit/33aff5c6c5c482095137f3e52e3d2b7cfdf70ee5))
+
 ## [0.13.0](https://github.com/kgoedecke/doop/compare/desktop-v0.12.0...desktop-v0.13.0) (2026-11-08)
 
 
