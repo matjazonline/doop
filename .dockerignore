@@ -7,3 +7,4 @@ data.*/
 .env.local
 .codex-review-records
 graft
+**/__pycache__

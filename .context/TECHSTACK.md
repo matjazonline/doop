@@ -384,7 +384,7 @@ data-doop-webfonts>` for the roster families the frame names and does not load i
   label key in the `actions` catalog, menu and section, chords, `edit`, `enabled`, `checked`,
   `run`), and the keyboard (`dispatchActionKey`, called first by `CanvasPage`'s keydown), the ⌘K
   palette (`CommandPalette.tsx`, cmdk through `ui/command.tsx`; text that names no command goes to
-  the agent's composer as a prompt), the main menu off the bar's Doop mark (`MainMenu.tsx`: File,
+  the agent's composer as a prompt), the main menu off the bar's Doop mark (`MainMenu.tsx`: Go to files, then File,
   Edit, View, Object, Text, Arrange, Help) and the ⌃⇧? sheet (`ShortcutsSheet.tsx`) all read it.
   `CanvasPage` lends the registry its modals and panels as the `ActionHost`. Chords (`chords.ts`)
   are `mod` (⌘ on a Mac, Ctrl elsewhere), ⌥ chords by `code`, `macOnly` / `notMac` per platform (⌘Y
@@ -467,7 +467,11 @@ data-doop-webfonts>` for the roster families the frame names and does not load i
   stay hidden. Drawings and layers snap to their frame's edges and centre, their parent box and
   their siblings (`snapRects` on the runtime's hit replies) as well as the ruler guides.
   Ordinary HTML/SVG layers move in place through the runtime's geometry/style gesture bridge,
-  preserving layout and transforms and committing one undo step per drag.
+  preserving layout and transforms and committing one undo step per drag. A drag on one of
+  several picked layers (or inside one) moves them all: the rest ride the gesture as `followers`
+  (`styleGesture` `begin`), each translated by the pressed layer's delta, put back on Escape and
+  saved with it as one step; a multi-pick never takes a layout drop, and the pressed layer
+  becomes the pick's primary.
   The iframe runtime hit-tests the pointer in browser paint order and measures CSS layout
   size separately from transformed bounds. Pending pointer events are buffered until its
   reply, so fast drags and cancellation remain reliable. `src/lib/drawingMove.ts` preserves markup and translates coordinates when
@@ -713,6 +717,24 @@ data-doop-webfonts>` for the roster families the frame names and does not load i
   worker runs; a file calls `openBrowser()` for its own context (focus emulated, 30s navigation
   bound) and `fixtureUrl()` for its page. A test that needs its own Vite server (a proxy) builds it
   from `fixtureServerConfig()`, so every server shares one dependency hash and cache directory.
+- CI runs the browser tests on the Chrome for Testing build named in `.chrome-version`, installed
+  by the `test` job and passed as `CHROME_PATH`, so a runner image update cannot change the
+  browser without a commit. `bun run test:linux [vitest args]` (`scripts/test-linux.sh`,
+  `scripts/test-linux.py`, `tests/linux.Dockerfile`) needs Python3 and a trusted local Unix
+  Docker daemon with host networking. It runs the suite in a two-CPU Linux container with
+  its own PostgreSQL 18.6, data volumes and private-storage fixtures. Repository tests get
+  Docker-daemon access and run as root with Chromium's sandbox disabled; this applies only
+  to the test runner. On Apple Silicon it uses Debian Chromium, since Chrome for Testing
+  has no Linux arm64 build. x64 uses the committed Chrome version.
+  Each invocation prints a protected recovery state path. If interrupted, rerun
+  `sh scripts/test-linux.sh --cleanup /path/to/state.json` to remove only that run's fixtures;
+  recovery refuses a live owner or a changed daemon. It uses the recorded endpoint even if
+  the current Docker context changes. Uncertain cleanup retains the workspace, image and
+  recovery state and fails. Successful cleanup retains a small completion receipt and lock.
+  The daemon-host socket defaults to `/var/run/docker.sock`; set `DOOP_TEST_DOCKER_SOCKET`
+  only when the daemon uses a different socket path. Remote TCP/SSH endpoints are unsupported.
+  `python3 scripts/check-test-linux.py` exercises competing real runners, interruption,
+  recovery and authority refusal; the `linux-fixtures` CI job runs this regression check.
 
 ## 8. CI/CD and Delivery
 

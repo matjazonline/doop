@@ -2,8 +2,10 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import type { Page } from 'puppeteer-core'
 import type { CanvasRole } from '../shared/canvasRole'
 import type { Frame } from '../shared/types'
+import type { PrivateDocumentContext } from '../shared/privateMedia'
 import { findBrowserPath } from '../server/screenshot'
 import { fixtureUrl, openBrowser, type TestBrowser } from './browser'
+import { fixturePrivateMaterializer } from './privateMediaAdapter'
 
 declare global {
   interface Window {
@@ -151,6 +153,20 @@ describe.skipIf(!findBrowserPath() || !CLIPBOARD_IS_RELIABLE)('canvas clipboard 
           contentType: 'application/json',
           body: JSON.stringify({ url: '/clipboard-image.png' }),
         })
+      } else if (path === '/api/canvases/c/private-materialization' && request.method() === 'POST') {
+        // Synthetic clipboard interaction only; native tests prove admission/access.
+        const input: {
+          source: string
+          syntax?: Parameters<typeof fixturePrivateMaterializer>[3]
+          context: Omit<PrivateDocumentContext, 'canvasId'>
+        } = JSON.parse(request.postData()!)
+        const result = await fixturePrivateMaterializer(
+          input.source,
+          { ...input.context, canvasId: 'c' },
+          undefined,
+          input.syntax,
+        )
+        await request.respond({ status: 200, contentType: 'application/json', body: JSON.stringify(result) })
       } else if (path === '/api/canvases/c/fonts') {
         await request.respond({ status: 200, contentType: 'application/json', body: '[]' })
       } else if (path === '/api/auth/get-session') {
@@ -203,6 +219,10 @@ describe.skipIf(!findBrowserPath() || !CLIPBOARD_IS_RELIABLE)('canvas clipboard 
     await copyImage()
     await chord('v')
     await expect.poll(() => uploads).toBe(1)
+    /* the picture lands as a frame of its own once it has uploaded. The test
+       waits for that request: left in flight, it arrived during the next
+       test, after `created` was emptied, and was counted as that test's */
+    await expect.poll(() => created.length).toBe(1)
     expect(await count('section')).toBe(1)
   })
 
