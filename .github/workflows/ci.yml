@@ -65,6 +65,13 @@ jobs:
       # The Docker build stage uses Bun even for commands named `node`.
       - run: bun run --bun build
 
+  # Exercise the supported self-host entry point without managed build arguments.
+  self-host-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose build doop
+
   # The suite boots a real server per integration file, which is CPU-bound on
   # the 2-vCPU runner; sharding across runners is what brings the step down.
   test:

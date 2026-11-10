@@ -3,7 +3,14 @@
 #   BETTER_AUTH_SECRET=$(openssl rand -hex 32) docker compose up -d
 services:
   doop:
-    build: .
+    build:
+      context: .
+      target: self-host
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+      - seccomp:./deploy/chromium-seccomp.json
     ports:
       - '4400:4400'
     environment:

@@ -1,5 +1,15 @@
 # Managed company container
 
+For standalone self-hosting, run `docker compose up` from the repository root.
+Compose builds the `self-host` target without a source fingerprint. To build that
+image directly, use `docker build --target self-host -t doop .`; the runtime
+security settings below apply to either target.
+
+The default Docker target is `managed`. It requires a 64-character lowercase
+hexadecimal `DOOP_SOURCE_FINGERPRINT` build argument and records it in
+`io.openbot.doop.source-fingerprint`. The self-host target does not carry that
+managed source-acceptance label.
+
 Build with the pinned base images and frozen Bun lockfile using Openbot's
 `scripts/doop-test.py image` command. The source fingerprint label identifies the
 base revision plus reviewed changes. Retain the exported OCI archive and its

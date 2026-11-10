@@ -15,7 +15,7 @@ WORKDIR /app
 COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile --production --ignore-scripts
 
-FROM node:22-bookworm-slim@sha256:5ec23b7c622b00547753bc6ffd78085dd868a68aeb41c8e0a1418f033e13d96d
+FROM node:22-bookworm-slim@sha256:5ec23b7c622b00547753bc6ffd78085dd868a68aeb41c8e0a1418f033e13d96d AS runtime
 WORKDIR /app
 # A dated, signed Debian archive keeps Chromium/fonts reproducible. Only the
 # archive's expiry check is disabled; package signatures remain mandatory.
@@ -40,12 +40,8 @@ COPY --from=build /app/dist ./dist
 COPY server ./server
 COPY shared ./shared
 
-ARG DOOP_SOURCE_FINGERPRINT
-RUN test "${#DOOP_SOURCE_FINGERPRINT}" -eq 64 \
-  && case "$DOOP_SOURCE_FINGERPRINT" in *[!0-9a-f]*) exit 1;; esac
 LABEL org.opencontainers.image.source="https://github.com/kgoedecke/doop" \
-  org.opencontainers.image.revision="8b08ca2cbe5c7510b2cfa9f01475227441580476" \
-  io.openbot.doop.source-fingerprint="$DOOP_SOURCE_FINGERPRINT"
+  org.opencontainers.image.revision="8b08ca2cbe5c7510b2cfa9f01475227441580476"
 
 ENV NODE_ENV=production CHROME_PATH=/usr/bin/chromium CHROME_NO_SANDBOX=false \
   PORT=4400 HOME=/tmp XDG_CONFIG_HOME=/tmp/config XDG_CACHE_HOME=/tmp/cache
@@ -53,3 +49,14 @@ USER node
 EXPOSE 4400
 HEALTHCHECK --interval=30s --timeout=5s CMD node -e "fetch('http://localhost:'+process.env.PORT+'/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
 CMD ["node", "--import", "tsx", "server/index.ts"]
+
+# Standalone self-hosting needs no Openbot source-acceptance metadata.
+FROM runtime AS self-host
+
+# Keep the default target strict for the managed acceptance runner. Its source
+# fingerprint identifies the separately reviewed input, not merely the base ref.
+FROM self-host AS managed
+ARG DOOP_SOURCE_FINGERPRINT
+RUN test "${#DOOP_SOURCE_FINGERPRINT}" -eq 64 \
+  && case "$DOOP_SOURCE_FINGERPRINT" in *[!0-9a-f]*) exit 1;; esac
+LABEL io.openbot.doop.source-fingerprint="$DOOP_SOURCE_FINGERPRINT"

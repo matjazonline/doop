@@ -678,9 +678,12 @@ In production also set `BETTER_AUTH_URL` to the public origin — OAuth URLs are
 ## Deploy
 
 The repo ships a production `Dockerfile` (client build + Chromium for frame screenshots).
-Any container host works; Railway/Fly are the least friction:
+Choose a container host that supports Chromium's sandbox and the
+[runtime settings](deploy/README.md):
 
-1. Create the app from this repo (both auto-detect the Dockerfile).
+1. Build and deploy an image from the `self-host` target, or explicitly select that target in
+   your host's build configuration. Automatic Dockerfile detection alone selects `managed`,
+   which requires a reviewed source fingerprint.
 2. Add a managed Postgres and set `DATABASE_URL`. **Don't skip this in real deployments** —
    the PGlite fallback is embedded/single-process and only suits a single instance with a
    persistent volume mounted at `/app/data`.
@@ -689,12 +692,18 @@ Any container host works; Railway/Fly are the least friction:
 4. Health check: `GET /healthz`. The server trusts one proxy hop (`trust proxy`), so
    TLS termination at the platform edge works out of the box.
 
-Local sanity check of the exact production image:
+Local sanity check of the self-host production image (no source fingerprint required):
 
 ```bash
-docker build -t doop .
-docker run -p 4400:4400 -e BETTER_AUTH_URL=http://localhost:4400 -e BETTER_AUTH_SECRET=dev-only doop
+docker build --target self-host -t doop .
+docker run -p 4400:4400 --cap-drop=ALL --security-opt=no-new-privileges \
+  --security-opt=seccomp=./deploy/chromium-seccomp.json \
+  -e BETTER_AUTH_URL=http://localhost:4400 -e BETTER_AUTH_SECRET="$(openssl rand -hex 32)" doop
 ```
+
+`docker compose up` selects this self-host target automatically. Openbot-managed
+images use the default `managed` target and require a reviewed source fingerprint;
+see [the deployment guide](deploy/README.md).
 
 ### Environment variables
 
